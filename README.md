@@ -44,16 +44,14 @@ Long story short, the script would download a massive repository of tweets (~520
       - Script will automatically resume where it left off if downloading is interrupted. Completed corpus will in a file named full-corpus.csv
 
 ### Important notes about install.py
-- NOTE: Any original scripts from Niek J. Sanders found on his offical website (e.g. http://www.sananalytics.com/lab/twitter-sentiment/) are defunct and the domain has been sold.
 I updated `install.py` to work with Python 3 as it was originally written for Python 2, see below for details:
-   1) raw_input() function renamed to input()
-                 #2) Line 94: Changed 'rb' to 'r' for opening in text mode ==> 'rb' opens the file in binary mode, used for files that don't contain text.
-                        open(filename, mode)
-                 #3) Line 177: Changed 'wb' to 'r' for writing to a file.
-                 #4) Lines 190 - 192: Changed max tweets per hour to 720, since requests in 2020 have been raised to 180 per 15 minutes (so 720 per hour).
-                       ==> Found here for 'GET: search/tweets': https://developer.twitter.com/en/docs/twitter-api/v1/rate-limits
-                 #5) Changed print statements in entire program to include parentheses around strings to be printed (must be defunct from 2.7 to allow no () ).
-                 #6) Changed Line 245 & Line 221 to stop reading bytes to unicode (rb -> r or wb -> w)
+   1) raw_input() function renamed to input().
+   2) **Line 94:** Changed `rb` to `r` for opening in text mode. `rb` opens the file in binary mode, which is used for files that don't contain text.
+   3) **Line 177:** Changed `wb` to `r` for writing to a file.
+   4) **Lines 190 - 192:** Changed max tweets per hour to 720, since requests in 2020 have been raised to 180 per 15 minutes (so 720 per hour).
+      - Found here for 'GET: search/tweets': https://developer.twitter.com/en/docs/twitter-api/v1/rate-limits
+   6) Changed print statements in entire program to include parentheses around strings to be printed. This must be some weird thing from Py2.7 that didn't allow `()` within print statements.
+   7) Changed **Line 221 & Line 245** to stop reading bytes to unicode.
 
 
 
