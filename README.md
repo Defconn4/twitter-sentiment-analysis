@@ -29,92 +29,48 @@
 - oauth2
    - `pip install python-oauth2`
 
-### install.py
+## install.py
 When I originally started this project, I was closely following a tutorial which utilized the repository [`karanluthra/twitter-sentiment-training`](https://github.com/karanluthra/twitter-sentiment-training), which was an update of a script developed by Niek J. Sanders (his domain has since been sold, but credit where credit is due) for his own Twitter Sentiment Classifier. `karanluthra`'s repository simply updated the script to work with Twitter's REST API v1.1 from nearly a decade ago, thus it was udpated to incorporate the authentication capability.
 
 Long story short, the script would download a massive repository of tweets (~5200) for use, which we would then authenticate each tweet using the Twitter API in `classifiy.py`. However, this script can take up to 18 hours from my own personal experience, so I included the files `corpus.csv` and `tweet_data.csv` in my repository to skip this step. The former is the original full corpus obtained by running `install.py`. The latter is simply the authenticated tweets from the full corpus. The process of authentication done in `classify.py` is very slow as well, hence why I've included `tweet_data.csv`.
 
-**Basically, the code is ready to use right out of the box so you don't need to wait days like I did!**
+## **Basically, the code is ready to use right out of the box so you don't need to wait days like I did!**
+
+### If you plan to use `install.py`
+   1) Set access key and (access) secret, consumer key and (consumer) secret to global variables in install.py
+   2) Start script in cmd, navigate to correct directory and type: `python install.py`
+   3) Hit enter 3 times to accept default script parameters.
+   4) Wait until script indicates that it's done.
+      - Script will automatically resume where it left off if downloading is interrupted. Completed corpus will in a file named full-corpus.csv
+
+### Important notes about install.py
+- NOTE: Any original scripts from Niek J. Sanders found on his offical website (e.g. http://www.sananalytics.com/lab/twitter-sentiment/) are defunct and the domain has been sold.
+I updated `install.py` to work with Python 3 as it was originally written for Python 2, see below for details:
+   1) raw_input() function renamed to input()
+                 #2) Line 94: Changed 'rb' to 'r' for opening in text mode ==> 'rb' opens the file in binary mode, used for files that don't contain text.
+                        open(filename, mode)
+                 #3) Line 177: Changed 'wb' to 'r' for writing to a file.
+                 #4) Lines 190 - 192: Changed max tweets per hour to 720, since requests in 2020 have been raised to 180 per 15 minutes (so 720 per hour).
+                       ==> Found here for 'GET: search/tweets': https://developer.twitter.com/en/docs/twitter-api/v1/rate-limits
+                 #5) Changed print statements in entire program to include parentheses around strings to be printed (must be defunct from 2.7 to allow no () ).
+                 #6) Changed Line 245 & Line 221 to stop reading bytes to unicode (rb -> r or wb -> w)
+
+
 
 ## Backstory & Intentions
 ### Origin
 This project was stuck in my own personal-project purgatory for the longest time due to a variety of circumstances, largely COVID, academics and general laziness. This was something I envisioned I would flesh out, but by the time I sat down again at random intervals over the past year, I found that the age old programming problem of "project-burnout" had hit me. So, I wanted to finally put this old dog to rest. It was still a very fun project and I'm excited to move onto move complex and intricate projects in the future!
 
-### Intentions
-1) Be able to search tweets containing a keyword/sentence (string is passed in regardless).
-2) Parse the tweet by removing any additonal characters (repeated characters), URLS/links, symbols, etc.
+This project was great for quick exposure to REST API mechanics and usage, as well as text manipulation, and data aggregation, cleaning, and organization.
 
-UPDATE: 7/19/20
+## Roadmap for improvement
+1) Determine why some strings produce purely neutral sentiments when they are *clearly* polarizing topics on Twitter. Get creative and you can think of plenty of examples :)
+2) Implement a more rigorous procedure for determining overall sentiments.
+3) To be determined...
 
-What is done:
-- Wrote the basic code to authenticate use of Twitter API.
-- Built a very basic test set, and organized the tweets in the terminal for viewing prior to making a data set for testing.
-- TODO: Want to figure out how to use status.place to get actual geolocation of a tweet
-
-Next steps:
-1) Get the Niek Sanders' Corpus model for 5k hand-classified tweets.
-===> Twitter still uses the REST API v1.1 so you can do Niek Sander's corpus installation found here: 
-           https://github.com/karanluthra/twitter-sentiment-training
-
-Done:
-1) Downloaded twitter-sentiment training:
-===> Installation:
-0) Make sure you have all packages installed that are to be imported: oauth2
-====> THIS WAS WRITTEN IN PYTHON 2, had to change some of the defunct functions.
-====> #1) raw_input() function renamed to input()
-              #2) Line 94: Changed 'rb' to 'r' for opening in text mode ==> 'rb' opens the file in binary mode, used for files that don't contain text.
-                     open(filename, mode)
-              #3) Line 177: Changed 'wb' to 'r' for writing to a file.
-              #4) Lines 190 - 192: Changed max tweets per hour to 720, since requests in 2020 have been raised to 180 per 15 minutes (so 720 per hour).
-                    ==> Found here for 'GET: search/tweets': https://developer.twitter.com/en/docs/twitter-api/v1/rate-limits
-              #5) Changed print statements in entire program to include parentheses around strings to be printed (must be defunct from 2.7 to allow no () ).
-              #6) Changed Line 245 & Line 221 to stop reading bytes to unicode (rb -> r or wb -> w)
-1) Set access key and (access) secret, consumer key and (consumer) secret to global variables in install.py
-2) Start script in cmd, navigate to correct directory and type: python install.py
-3) Hit enter 3 times to accept defaults.
-4) Wait until script indicates that it's done.
-==> Script will automatically resume where it left off if downloading is interrupted. Completed corpus will in a file named full-corpus.csv
-
-NOTE: Any original scripts from Niek J. Sanders found on his offical website (e.g. http://www.sananalytics.com/lab/twitter-sentiment/) are defunct and the domain has been sold.
-I updated the scripts to work with Python 3, see changelog above for install.py
-
-
-Jan. 4th - 18:
-1) Been working on implementing the training_data into an array of dictionaries, so you don't have to wait 8 hours to re-read all tweets from the full_corpus.
-2) Created the file `training_set_added_keys.csv` to add keys "topic", "tweet_id", etc.. to the training_data file so I can more easily convert it.
-
-To convert the file: this finally worked:
-
-1) Use csv.DictReader(filename).
-      1a) Add the row for each column in the training_set_added_keys.csv that has the 'topic', 'label', 'tweet_id', 'text'
-2) Clean the 'filename' csv file (in our case was training_set_added_keys.csv) by removing the blank rows.
-      2a) Then remove the leading and trailing single quotes from the tweet_ids so that we can see them as integers.
-3) Then we need to conver the csv file (now called keys_cleaned.csv) to a list of dictionaries for tweet pre-processing.
-# References to line 218 in code.
-
-1/24/21: Biggest Issue, when i was working on the training_set_added_keys.csv for some reason all the tweet IDs were made the same number. Need to fix this immediately before moving on.
-
-
-7/9/21 (almost started this a year ago wow):
-
-Resources:
-
-1) For information on the Tweet object: https://developer.twitter.com/en/docs/twitter-api/v1/data-dictionary/object-model/tweet
-
-2) For information on the User object: https://developer.twitter.com/en/docs/twitter-api/v1/data-dictionary/object-model/user
-
-3) Tweepy API docs: https://docs.tweepy.org/en/v3.5.0/api.html#tweepy-api-twitter-api-wrapper
-
-4) Python-Twitter API docs: https://python-twitter.readthedocs.io/en/latest/index.html
-
-Links left in Chrome:
-
-1) https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dropna.html
-2) https://docs.python.org/3/library/csv.html
-3) https://stackoverflow.com/questions/9233027/unicodedecodeerror-charmap-codec-cant-decode-byte-x-in-position-y-character
-4) https://stackoverflow.com/questions/30750843/python-3-unicodedecodeerror-charmap-codec-cant-decode-byte-0x9d
-
-7/27/21:
-
-UPDATE:
-- Turns out you don't care about the Tweet ID after you build the Training Set, all you need is the tweet text and the tweet sentiment (text and label).
+# Sources:
+1) https://towardsdatascience.com/creating-the-twitter-sentiment-analysis-program-in-python-with-naive-bayes-classification-672e5589a7ed
+2) https://github.com/karanluthra/twitter-sentiment-training/blob/master/corpus.csv
+3) https://developer.twitter.com/en/docs/twitter-api/api-reference-index
+4) https://python-twitter.readthedocs.io/en/latest/twitter.html#module-twitter.api
+5) https://docs.tweepy.org/en/v3.5.0/api.html#tweepy-api-twitter-api-wrapper
