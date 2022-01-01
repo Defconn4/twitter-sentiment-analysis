@@ -2,67 +2,47 @@
 
 ## Check out & Run the Code
 - Clone the repository.
-- Optionally, run `install.py` (I will explain more details later).
+- You will need to obtain authentication credentials to use the Twitter API by registering on the [Twitter Developer Platform](https://developer.twitter.com/en).
+   - Sign up, click on the Apps button, create an App, and request access for your own personal use. Your application may take up to a day to be approved, but more likely a couple of a hours.
+- Optionally, run `install.py` (see details below).
 - Head to `classify.py` in your favorite IDE and place your Twitter authentication credentials where noted near the top of the file.
 - Feel free to change the constant `NUM_TWEETS` to fetch > 10 tweets at a time from the Twitter API (though number of requests API to 180 requests per 15 minutes)!
 - Run the code in your terminal and enter any string of your choice and see how it everyone else feels about it!
 
+## Packages needed:
+### NOTE: It might be quciker running `classify.py` in cmd and seeing what needs to be installed ;).
+- python twitter
+   - `pip install python-twitter`
+- Natural Langugae Toolkit (nltk)
+
+   - `pip install --user -U nltk`
+   
+      - NOTE: `--user` means that packages are installed wiithin your home directory to void system python installation.
+      - Pretty sure `-U` means "upgrade". which forces updates in case of a backed-installation.
+ 
+- NLTK corpora
+    - `python -m textblob.download_corpora`
+
+- textblob
+   - `pip install textblob`
+
+- oauth2
+   - `pip install python-oauth2`
+
+### install.py
+When I originally started this project, I was closely following a tutorial which utilized the repository [`karanluthra/twitter-sentiment-training`](https://github.com/karanluthra/twitter-sentiment-training), which was an update of a script developed by Niek J. Sanders (his domain has since been sold, but credit where credit is due) for his own Twitter Sentiment Classifier. `karanluthra`'s repository simply updated the script to work with Twitter's REST API v1.1 from nearly a decade ago, thus it was udpated to incorporate the authentication capability.
+
+Long story short, the script would download a massive repository of tweets (~5200) for use, which we would then authenticate each tweet using the Twitter API in `classifiy.py`. However, this script can take up to 18 hours from my own personal experience, so I included the files `corpus.csv` and `tweet_data.csv` in my repository to skip this step. The former is the original full corpus obtained by running `install.py`. The latter is simply the authenticated tweets from the full corpus. The process of authentication done in `classify.py` is very slow as well, hence why I've included `tweet_data.csv`.
+
+**Basically, the code is ready to use right out of the box so you don't need to wait days like I did!**
+
 ## Backstory & Intentions
 ### Origin
-This project was stuck in my own personal-project purgatory for the longest time due to a variety of circumstances, largely COVID, academics and general laziness. This was something I envisioned to be fleshed out much more in scale
+This project was stuck in my own personal-project purgatory for the longest time due to a variety of circumstances, largely COVID, academics and general laziness. This was something I envisioned I would flesh out, but by the time I sat down again at random intervals over the past year, I found that the age old programming problem of "project-burnout" had hit me. So, I wanted to finally put this old dog to rest. It was still a very fun project and I'm excited to move onto move complex and intricate projects in the future!
 
-
-Intentions on where I want to take this project/what I want it to be able to do:
+### Intentions
 1) Be able to search tweets containing a keyword/sentence (string is passed in regardless).
 2) Parse the tweet by removing any additonal characters (repeated characters), URLS/links, symbols, etc.
-
-Files needed: (2 & 3 are found here: https://github.com/karanluthra/twitter-sentiment-training)
-1) Authentification.py
-2) install.py 
-3) corpus.csv
-
-4) Get verified on Twitter so you can apply for Twitter API usage
-==> Get verified on Twitter so you can use the Twitter API, details found here in this article
-===> https://towardsdatascience.com/creating-the-twitter-sentiment-analysis-program-in-python-with-naive-bayes-classification-672e5589a7ed
-
-5) Need the following libraries once Python is installed (w/ IDE):
-==> twitter
-====> pip install python-twitter
-==> nltk
-====> pip install --user -U nltk
-^^^^^^^^^
-Notes: "--user" means that packages are installed wiithin your home directory to void system python installation.
-"-U" means upgrade (? - I think this is what is means), which forces updates in case of a backed-installation.
-^^^^^^^^^
-==> (optional) numpy
-====> pip install --user -U numpy
-
-==> textblob
-====> pip install textblob
-
-==> NLTK corpora
-====> python -m textblob.download_corpora
-
-==> oauth2
-===> pip install python-oauth2
-
-To test installation:
-run python, then type import nltk
-==> If the line runs, then it's all good to go, should look like ">>>" for the interpretaor waiting for a next command
-
-==> re
-====> Stands for "Regular Expresion" syntax, which is useful for checking if a particular string mataches a given regular expression.
-A regular expression is a sequence of characters that forms a search pattern.
-==> csv
-====> Allows you to work with Excel files pretty much.
-==> time
-====> Allows you access time and time conversions
-==> json
-====> Javascript Object Notation, uses human-readable text to store and transmit data object consisting of attributes - value pairs and array data types.
-
-NOTE: re, csv, time, & json are standard libraries in python 3.8 so they do not need to be installed separately.
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 UPDATE: 7/19/20
 
